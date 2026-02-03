@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>ألعاب: مطابقة + ترتيب حروف + ذاكرة</title>
 
   <!-- Almarai -->
@@ -41,53 +41,93 @@
 
       /* ✅ Card background image from GitHub (raw) */
       --cardBgUrl: url("https://raw.githubusercontent.com/bubblesinarabic/isit-istand-iwalk/main/background2.png");
+
+      /* Responsive system tokens */
+      --wrapMax: 1100px;
+      --pad: clamp(12px, 3.2vw, 24px);
+      --cardPad: clamp(12px, 2.4vw, 16px);
+      --radius: clamp(16px, 2.2vw, 20px);
+      --radiusSm: clamp(12px, 2vw, 16px);
+
+      --tapMin: 44px; /* iOS recommended min touch target */
+      --fsTitle: clamp(16px, 3.6vw, 18px);
+      --fsQ: clamp(16px, 3.8vw, 19px);
+      --fsSupport: clamp(13px, 3.3vw, 14px);
+      --fsChip: clamp(14px, 3.6vw, 15px);
+      --fsBtn: clamp(14px, 3.6vw, 15px);
     }
 
     *{ box-sizing:border-box; }
+
+    html{
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      scroll-behavior: smooth;
+    }
+
     body{
       margin:0;
       background:var(--bg);
       font-family:"Almarai", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       color:var(--text);
-      padding:24px;
+
+      /* Safe-area aware padding (iOS notch/home indicator) */
+      padding:
+        calc(var(--pad) + env(safe-area-inset-top))
+        calc(var(--pad) + env(safe-area-inset-right))
+        calc(var(--pad) + env(safe-area-inset-bottom))
+        calc(var(--pad) + env(safe-area-inset-left));
+
       display:flex;
       justify-content:center;
+
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
     }
-    .wrap{ width:min(1100px, 100%); }
+
+    .wrap{ width:min(var(--wrapMax), 100%); }
 
     header{
       direction:ltr;
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:18px;
+      gap:14px;
       flex-wrap:wrap;
       margin-bottom:10px;
     }
+
     .brand{
       display:flex;
       align-items:flex-start;
       gap:12px;
-      min-width:280px;
+      min-width:min(320px, 100%);
+      flex: 1 1 360px;
     }
+
     .logo{
-      width:52px;height:52px;
+      width:clamp(44px, 7vw, 52px);
+      height:clamp(44px, 7vw, 52px);
       border-radius:14px;
       background:#fff;
       border:1px solid rgba(16,32,48,.16);
       box-shadow:var(--softShadow);
       object-fit:contain;
       padding:8px;
+      flex:0 0 auto;
     }
+
     .title{
       margin:0;
-      font-size:18px;
+      font-size:var(--fsTitle);
       font-weight:800;
       letter-spacing:.2px;
+      line-height:1.25;
     }
+
     .subtitle{
       margin-top:6px;
-      font-size:13px;
+      font-size:clamp(12px, 3.2vw, 13px);
       color:var(--muted);
       line-height:1.35;
     }
@@ -99,7 +139,9 @@
       justify-content:flex-end;
       flex-wrap:wrap;
       margin-top:6px;
+      flex: 0 1 auto;
     }
+
     .pill{
       direction:ltr;
       display:inline-flex;
@@ -109,7 +151,7 @@
       background:var(--pillBg);
       border-radius:999px;
       padding:6px 10px;
-      font-size:13px;
+      font-size:clamp(12px, 3.1vw, 13px);
       color: rgba(16,32,48,.75);
       white-space:nowrap;
     }
@@ -131,7 +173,7 @@
     }
 
     .card{
-      border-radius:20px;
+      border-radius:var(--radius);
       background-image:
         linear-gradient(rgba(255,255,255,.35), rgba(255,255,255,.35)),
         var(--cardBgUrl);
@@ -141,7 +183,7 @@
       background-color: var(--card);
       border:2px solid var(--cardBorder);
       box-shadow:var(--shadow);
-      padding:16px;
+      padding:var(--cardPad);
       overflow:hidden;
       transition: background .2s ease, border-color .2s ease;
     }
@@ -165,7 +207,9 @@
       align-items:flex-start;
       gap:10px;
       margin-bottom:10px;
+      flex-wrap:wrap;
     }
+
     .chipLabel{
       display:inline-flex;
       align-items:center;
@@ -178,6 +222,7 @@
       color: rgba(16,32,48,.75);
       white-space:nowrap;
     }
+
     .badge{
       display:none;
       border:1px solid var(--chipBorder);
@@ -197,26 +242,29 @@
       direction:rtl;
       text-align:right;
       margin:0;
-      font-size:19px;
+      font-size:var(--fsQ);
       font-weight:800;
       line-height:1.35;
     }
+
     .support{
       direction:rtl;
       text-align:right;
       margin-top:6px;
-      font-size:14px;
+      font-size:var(--fsSupport);
       font-weight:700;
       color: rgba(16,32,48,.75);
+      line-height:1.45;
     }
 
     .panel{
       margin-top:12px;
       border:1px solid rgba(16,32,48,.16);
       background: rgba(255,255,255,.35);
-      border-radius:16px;
+      border-radius:var(--radiusSm);
       padding:10px;
     }
+
     .panelTitle{
       direction:ltr;
       font-size:12px;
@@ -233,16 +281,22 @@
       direction:rtl;
       justify-content:flex-start;
     }
+
     .word{
       border-radius:14px;
       border:1px solid var(--chipBorder);
       background: var(--chipBg);
-      padding:9px 10px;
+      padding:10px 12px;
       font-weight:800;
       cursor:grab;
       user-select:none;
       box-shadow: 0 8px 18px rgba(16,32,48,.08);
-      font-size:15px;
+      font-size:var(--fsChip);
+      min-height: var(--tapMin);
+      display:inline-flex;
+      align-items:center;
+      touch-action: manipulation;
+      white-space:nowrap;
     }
     .word:hover{ background: var(--chipBgHover); }
     .word[aria-disabled="true"]{ opacity:.65; cursor:not-allowed; box-shadow:none; }
@@ -252,12 +306,15 @@
       border-radius:16px;
       border:1px solid var(--btnBorder);
       background:var(--btnBg);
-      padding:10px 14px;
+      padding:12px 14px;
       font-weight:800;
+      font-size:var(--fsBtn);
       cursor:pointer;
       display:inline-flex;
       align-items:center;
       gap:8px;
+      min-height: var(--tapMin);
+      touch-action: manipulation;
     }
     .btn:hover{ background:var(--btnBgHover); }
     .btn:disabled{ opacity:.55; cursor:not-allowed; }
@@ -271,17 +328,18 @@
     }
     .btnBig .right{
       display:inline-flex;
-      align-items:center;
+      align-items:flex-start;
       gap:10px;
       direction:rtl;
       text-align:right;
     }
     .btnBig .name{
-      font-size:16px;
+      font-size:clamp(15px, 3.8vw, 16px);
       font-weight:900;
+      line-height:1.25;
     }
     .btnBig .desc{
-      font-size:12px;
+      font-size:clamp(11px, 3.1vw, 12px);
       font-weight:800;
       color: rgba(16,32,48,.70);
       margin-top:2px;
@@ -297,12 +355,14 @@
       flex-wrap:wrap;
       margin-top:12px;
     }
+
     .helper{
       direction:rtl;
-      font-size:13px;
+      font-size:clamp(12px, 3.2vw, 13px);
       font-weight:800;
       color: rgba(16,32,48,.75);
       text-align:right;
+      flex: 1 1 220px;
     }
 
     /* Card 0 (Picker) */
@@ -314,10 +374,11 @@
       direction:ltr;
     }
     @media (max-width: 860px){ .pickGrid{ grid-template-columns: 1fr; } }
+
     .pickBox{
       border:1px solid rgba(16,32,48,.16);
       background: rgba(255,255,255,.35);
-      border-radius:16px;
+      border-radius:var(--radiusSm);
       padding:12px;
       direction:rtl;
     }
@@ -338,20 +399,22 @@
 
     /* Game preview images under each game button */
     .gamePreview{
-      margin-top:8px;
+      margin-top:10px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       direction:rtl;
     }
     .previewImg{
-      width:86px; height:64px;
+      width:clamp(74px, 18vw, 86px);
+      height:clamp(56px, 14vw, 64px);
       border-radius:12px;
       border:1px solid rgba(16,32,48,.18);
       background: rgba(255,255,255,.80);
       object-fit:contain;
       padding:6px;
       box-shadow: 0 8px 18px rgba(16,32,48,.08);
+      flex:0 0 auto;
     }
 
     /* Card 1 grid */
@@ -371,9 +434,10 @@
       border-radius:14px;
       padding:10px;
     }
+
     .imgBox{
       width:100%;
-      height:120px;
+      height:clamp(110px, 22vw, 140px);
       border-radius:12px;
       border:1px solid rgba(16,32,48,.18);
       background: rgba(255,255,255,.70);
@@ -383,7 +447,11 @@
       overflow:hidden;
       box-shadow: 0 8px 18px rgba(16,32,48,.08);
     }
-    .imgBox img{ width:100%; height:100%; object-fit:contain; }
+    .imgBox img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
 
     .dropSlot{
       margin-top:8px;
@@ -392,17 +460,19 @@
       background: rgba(255,255,255,.70);
       border:2px dashed rgba(16,32,48,.22);
       padding:10px;
-      min-height:44px;
+      min-height:var(--tapMin);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:8px;
+      touch-action: manipulation;
     }
     .dropSlot.dragover{
       border-color: rgba(28,143,82,.65);
       background: rgba(255,255,255,.92);
     }
     .slotText{ font-size:16px; font-weight:800; }
+
     .returnBtn{
       font-family:"Almarai", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       font-weight:800;
@@ -410,8 +480,10 @@
       border:1px solid var(--btnBorder);
       background: rgba(255,255,255,.65);
       border-radius:12px;
-      padding:6px 10px;
+      padding:8px 10px;
       cursor:pointer;
+      min-height: var(--tapMin);
+      touch-action: manipulation;
     }
 
     /* Card 2 */
@@ -428,19 +500,21 @@
     .box{
       border:1px solid rgba(16,32,48,.16);
       background: rgba(255,255,255,.35);
-      border-radius:16px;
+      border-radius:var(--radiusSm);
       padding:12px;
       min-height:150px;
       display:flex;
       flex-direction:column;
       gap:10px;
     }
+
     .boxHead{
       direction:rtl;
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:10px;
+      flex-wrap:wrap;
     }
     .boxTitle{ font-weight:900; font-size:14px; }
     .boxHint{ font-size:12px; font-weight:800; color: rgba(16,32,48,.65); }
@@ -456,21 +530,28 @@
       gap:8px;
       direction: rtl;
       min-height:74px;
+      touch-action: manipulation;
     }
     .dropLine.dragover{
       border-color: rgba(28,143,82,.65);
       background: rgba(255,255,255,.92);
     }
+
     .letter{
       border-radius:12px;
       border:1px solid var(--chipBorder);
       background: rgba(255,255,255,.72);
       padding:10px 12px;
       font-weight:900;
-      font-size:20px;
+      font-size:clamp(18px, 5.2vw, 20px);
       cursor:grab;
       user-select:none;
       box-shadow: 0 8px 18px rgba(16,32,48,.08);
+      min-height: var(--tapMin);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      touch-action: manipulation;
     }
 
     .miniRow{
@@ -502,10 +583,12 @@
       gap:12px;
       align-items:center;
       direction:rtl;
+      flex-wrap:wrap;
     }
+
     .wordImage{
-      width:160px;
-      height:160px;
+      width:clamp(120px, 34vw, 160px);
+      height:clamp(120px, 34vw, 160px);
       border-radius:18px;
       border:1px solid rgba(16,32,48,.18);
       background: rgba(255,255,255,.86);
@@ -514,11 +597,13 @@
       box-shadow: 0 12px 26px rgba(16,32,48,.12);
       flex:0 0 auto;
     }
+
     .imgCaption{
-      font-size:13px;
+      font-size:clamp(12px, 3.2vw, 13px);
       font-weight:900;
       color: rgba(16,32,48,.70);
-      max-width:240px;
+      max-width: min(320px, 100%);
+      line-height:1.35;
     }
 
     .hintRow{
@@ -528,9 +613,10 @@
       gap:10px;
       border:1px solid rgba(16,32,48,.16);
       background: rgba(255,255,255,.55);
-      border-radius:16px;
+      border-radius:var(--radiusSm);
       padding:10px;
       margin-top:10px;
+      flex-wrap:wrap;
     }
     .hintRow.show{ display:flex; }
     .hintLabel{ font-size:12px; font-weight:900; color: rgba(16,32,48,.65); }
@@ -550,7 +636,7 @@
     .scoreBox{
       border:1px solid rgba(16,32,48,.16);
       background: rgba(255,255,255,.55);
-      border-radius:16px;
+      border-radius:var(--radiusSm);
       padding:12px;
       box-shadow: 0 10px 22px rgba(16,32,48,.10);
       direction:rtl;
@@ -565,11 +651,12 @@
       font-size:22px;
       font-weight:900;
     }
+
     .bigCongrats{
       margin-top:10px;
       border:1px solid rgba(16,32,48,.16);
       background: rgba(255,255,255,.55);
-      border-radius:16px;
+      border-radius:var(--radiusSm);
       padding:12px;
       direction:rtl;
       display:flex;
@@ -578,16 +665,17 @@
       gap:12px;
       flex-wrap:wrap;
     }
-    .bigCongrats strong{ font-size:18px; }
+    .bigCongrats strong{ font-size:clamp(16px, 4vw, 18px); }
 
     /* ===== Memory Game ===== */
     .memoryWrap{
       margin-top:12px;
       border:1px solid rgba(16,32,48,.16);
       background: rgba(255,255,255,.35);
-      border-radius:16px;
+      border-radius:var(--radiusSm);
       padding:12px;
     }
+
     .memoryGrid{
       margin-top:10px;
       display:grid;
@@ -606,6 +694,7 @@
       border-radius:16px;
       perspective: 900px;
     }
+
     .flipBtn{
       all:unset;
       display:block;
@@ -614,11 +703,15 @@
       cursor:pointer;
       border-radius:16px;
       position:relative;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
+
     .flipBtn:focus-visible{
       outline:3px solid rgba(28,143,82,.65);
       outline-offset:3px;
     }
+
     .inner3d{
       position:absolute;
       inset:0;
@@ -668,7 +761,7 @@
       direction:rtl;
       text-align:center;
       font-weight:900;
-      font-size:18px;
+      font-size:clamp(14px, 4vw, 18px);
       line-height:1.2;
       padding:8px 6px;
     }
@@ -680,6 +773,35 @@
     }
     .matched .inner3d{ box-shadow: 0 14px 30px rgba(22,163,74,.22); }
     .matched .face3d{ border-color: rgba(22,163,74,.65); }
+
+    /* ===== Mobile-first action layout ===== */
+    @media (max-width: 560px){
+      header{ gap:10px; }
+      .hud{ width:100%; justify-content:flex-start; }
+
+      .actions{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .actions .btn,
+      .actions .returnBtn{
+        width:100%;
+        justify-content:center;
+      }
+      .helper{ width:100%; }
+    }
+
+    /* Reduce motion for accessibility */
+    @media (prefers-reduced-motion: reduce){
+      .progressBar{ transition:none; }
+      .inner3d{ transition:none; }
+    }
+
+    /* Touch devices: no hover-only affordances */
+    @media (hover: none){
+      .word:hover{ background: var(--chipBg); }
+      .btn:hover{ background: var(--btnBg); }
+    }
   </style>
 </head>
 
@@ -1103,6 +1225,7 @@
   function playFeedback(which){
     stopAllAudio();
     const a = (which === "correct") ? audioCorrect : audioIncorrect;
+    a.currentTime = 0;
     a.play().catch(()=>{});
   }
   function playHoverWord(word){
@@ -1217,7 +1340,8 @@
       img.className = "previewImg";
       img.alt = w;
       img.loading = "lazy";
-      img.src = RAW_BASE + (memoryImageMap[w] || hintImageMap[w] || "");
+      const f = (memoryImageMap[w] || hintImageMap[w] || "");
+      img.src = f ? (RAW_BASE + f) : "";
       el.appendChild(img);
     });
   }
@@ -1261,7 +1385,7 @@
   });
 
   // =========================
-  // CARD 1: MATCHING (unchanged logic)
+  // CARD 1: MATCHING
   // =========================
   const wordChips1 = document.getElementById("wordChips1");
   const imgGrid = document.getElementById("imgGrid");
@@ -1321,7 +1445,8 @@
       chip.draggable = true;
       chip.style.opacity = "1";
     }
-    document.querySelector(`[data-slot1="${i}"]`).textContent = "____";
+    const slotTextEl = document.querySelector(`[data-slot1="${i}"]`);
+    if (slotTextEl) slotTextEl.textContent = "____";
 
     setBadge(card1, badge1, null);
     scoreText.textContent = "0";
@@ -1354,7 +1479,8 @@
       chip.style.opacity = ".65";
     }
 
-    document.querySelector(`[data-slot1="${i}"]`).textContent = word;
+    const slotTextEl = document.querySelector(`[data-slot1="${i}"]`);
+    if (slotTextEl) slotTextEl.textContent = word;
 
     setBadge(card1, badge1, null);
     scoreText.textContent = "0";
@@ -1392,7 +1518,7 @@
       const tile = document.createElement("div");
       tile.className = "tile";
       tile.innerHTML = `
-        <div class="imgBox"><img src="${RAW_BASE + p.file}" alt="${p.word}"></div>
+        <div class="imgBox"><img src="${RAW_BASE + p.file}" alt="${p.word}" loading="lazy"></div>
         <div class="dropSlot" id="slot1-${i}">
           <div class="slotText" data-slot1="${i}">____</div>
           <div><button class="returnBtn" type="button">إرجاع</button></div>
@@ -1436,7 +1562,7 @@
   resetBtn1.addEventListener("click", resetCard1);
 
   nextBtn.addEventListener("click", () => {
-    resetStats();         // start score tracking fresh when entering letters (same as your original)
+    resetStats();
     currentIndex2 = 0;
     showCard(3);
     loadWord2();
@@ -1445,7 +1571,7 @@
   homeBtn1.addEventListener("click", () => showCard(1));
 
   // =========================
-  // CARD 2: LETTER REARRANGE (your logic)
+  // CARD 2: LETTER REARRANGE
   // =========================
   const helper2 = document.getElementById("helper2");
   const backBtn = document.getElementById("backBtn");
@@ -1467,7 +1593,7 @@
   let draggedLetter = null;
 
   function normalizeArabicForCompare(s){
-    return s.replace(/[\u064B-\u065F\u0670\u0640]/g, "").trim();
+    return (s || "").replace(/[\u064B-\u065F\u0670\u0640]/g, "").trim();
   }
 
   function updateHudCard2(){
@@ -1579,7 +1705,6 @@
     const attempt = [...answerLine.querySelectorAll(".letter")].map(x => x.textContent).join("");
 
     stats.attempts += 1;
-
     const ok = normalizeArabicForCompare(attempt) === normalizeArabicForCompare(target);
 
     if (ok){
@@ -1622,7 +1747,6 @@
       currentIndex2++;
       loadWord2();
     } else {
-      // ✅ finished all words -> go to memory instead of score
       showCard(4);
       resetMemory(true);
     }
@@ -1636,7 +1760,7 @@
   homeBtn2.addEventListener("click", () => showCard(1));
 
   // =========================
-  // CARD 4: MEMORY (Flip) - image + word pairing, plays word audio on match
+  // CARD 4: MEMORY (Flip)
   // =========================
   const memoryGrid = document.getElementById("memoryGrid");
   const pairsPill = document.getElementById("pairsPill");
@@ -1868,7 +1992,7 @@
   homeBtnMemory.addEventListener("click", () => showCard(1));
 
   // =========================
-  // SCORE CARD (updated to include memory stats)
+  // SCORE CARD
   // =========================
   const scWordsDone = document.getElementById("scWordsDone");
   const scCorrect = document.getElementById("scCorrect");
@@ -1906,7 +2030,6 @@
 
     summaryLine.textContent = `الحروف: دقة ${accuracy}% — محاولات: ${stats.attempts} — الذاكرة: ${stats.memPairs}/7`;
 
-    // HUD at score
     placedText.textContent = `${stats.wordsTotal}/${stats.wordsTotal}`;
     progressBar.style.width = "100%";
     scoreText.textContent = String(stats.correctChecks);
@@ -1929,16 +2052,9 @@
   backToCard2Btn.addEventListener("click", () => { showCard(3); loadWord2(); });
   backToMemoryBtn.addEventListener("click", () => { showCard(4); updateHudMemory(); });
 
-  // =========================
-  // Card-level wiring missing from original after adding picker
-  // =========================
-  goMatchBtn?.addEventListener?.("click", goMatch);
-  goLettersBtn?.addEventListener?.("click", goLetters);
-  goMemoryBtn?.addEventListener?.("click", goMemory);
-
   // Init
   renderCard1();
-  showCard(1); // start on picker
+  showCard(1);
   lucide.createIcons();
 </script>
 </body>
